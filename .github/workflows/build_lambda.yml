@@ -33,4 +33,4 @@ jobs:
         debug: true
 
     - name: Deploy .zip to AWS
-      run: aws lambda update-function-code --function-name=test-lambda --zip-file=filb://deployment.zip
+      run: aws lambda update-function-code --function-name=test-lambda --zip-file=fileb://deployment.zip
