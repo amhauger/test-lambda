@@ -16,8 +16,7 @@ func main() {
 }
 
 func handleLambda(ctx context.Context, sqsEvent events.SQSEvent) error {
-	log.Info().Msg("hello from lambda")
+	log.Info().Strs("environmentVariables", os.Environ()).Msg("hello from lambda")
 	fmt.Println("hello from lambda")
-	os.Environ()
 	return nil
 }
