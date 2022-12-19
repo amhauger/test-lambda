@@ -1,0 +1,36 @@
+name: Deploy lambda to AWS
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go-version: [1.19.x]
+    
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-go@v3
+      with:
+        go-version: ${{ matrix.go-version }}
+
+    - name: Build Lambda Binary
+      run:
+        GOOS=linux CGO_ENABLED=0 go build -v -a -o main && zip deployment.zip main
+
+    - name: Gain AWS Access
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-west-2
+        zip_file: deployment.zip
+        debug: true
+
+    - name: Deploy .zip to AWS
+      run: aws lambda update-function-code --function-name=test-lambda --zip-file=filb://deployment.zip
