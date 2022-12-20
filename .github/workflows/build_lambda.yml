@@ -34,4 +34,4 @@ jobs:
 
     - name: Deploy .zip to AWS
       run: |
-        aws lambda update-function-configuration --function-name test-layers --runtime provided.al2 --environment Variables={OPENTELEMETRY_COLLECTOR_CONFIG_FILE=/opt/collector.yaml}
+        aws lambda update-function-code --function-name=test-layers --zip-file=fileb://deployment.zip
